@@ -66,12 +66,15 @@ model Profile {
   interestedIn       String[] @default([])
   relationshipIntent String?
 
-  bio       String?
-  interests String[] @default([])
-  prompt1   String?
-  prompt2   String?
-  prompt3   String?
-  photos    String[] @default([])
+  bio             String?
+  interests       String[] @default([])
+  prompt1         String?
+  prompt2         String?
+  prompt3         String?
+  // Chosen prompt text and its answer share the same array index.
+  promptQuestions String[] @default([])
+  promptAnswers   String[] @default([])
+  photos          String[] @default([])
 
   // Only this locality is shown publicly (for example, Sanpada or Vashi).
   city String

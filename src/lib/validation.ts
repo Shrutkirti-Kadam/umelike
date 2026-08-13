@@ -4,6 +4,11 @@ import {
   INTERESTED_IN_OPTIONS,
   RELATIONSHIP_OPTIONS,
 } from "@/lib/profile-options";
+import {
+  MAX_PROFILE_PROMPTS,
+  MIN_PROFILE_PROMPTS,
+  PROFILE_PROMPTS,
+} from "@/lib/prompt-options";
 
 const genderValues = GENDER_OPTIONS.map((option) => option.value);
 const interestedInValues = INTERESTED_IN_OPTIONS.map((option) => option.value);
@@ -139,23 +144,30 @@ export const profileSchema = z.object({
       message: "Keep each interest under 30 characters.",
     }),
 
-  prompt1: z
-    .string()
-    .trim()
-    .min(10, "Write at least 10 characters for this prompt.")
-    .max(200, "Keep this answer under 200 characters."),
+  promptQuestions: z
+    .array(
+      z.string().refine(
+        (value) =>
+          PROFILE_PROMPTS.includes(value as (typeof PROFILE_PROMPTS)[number]),
+        { message: "Choose a prompt from the available options." }
+      )
+    )
+    .min(MIN_PROFILE_PROMPTS, "Choose at least one prompt to answer.")
+    .max(MAX_PROFILE_PROMPTS, "Choose up to four prompts.")
+    .refine((values) => new Set(values).size === values.length, {
+      message: "Choose each prompt only once.",
+    }),
 
-  prompt2: z
-    .string()
-    .trim()
-    .min(10, "Write at least 10 characters for this prompt.")
-    .max(200, "Keep this answer under 200 characters."),
-
-  prompt3: z
-    .string()
-    .trim()
-    .min(10, "Write at least 10 characters for this prompt.")
-    .max(200, "Keep this answer under 200 characters."),
+  promptAnswers: z
+    .array(
+      z
+        .string()
+        .trim()
+        .min(10, "Write at least 10 characters for each prompt.")
+        .max(200, "Keep each answer under 200 characters.")
+    )
+    .min(MIN_PROFILE_PROMPTS, "Answer at least one prompt.")
+    .max(MAX_PROFILE_PROMPTS, "Answer up to four prompts."),
 
   photos: z
     .array(profilePhotoSchema)
@@ -184,6 +196,14 @@ export const profileSchema = z.object({
     .min(5, "Choose a distance of at least 5 km.")
     .max(500, "Choose a distance up to 500 km."),
 
+}).superRefine((profile, context) => {
+  if (profile.promptQuestions.length !== profile.promptAnswers.length) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      path: ["promptAnswers"],
+      message: "Add an answer for every selected prompt.",
+    });
+  }
 });
 
 export type ProfileInput = z.infer<typeof profileSchema>;

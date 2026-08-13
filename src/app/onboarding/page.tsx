@@ -31,9 +31,11 @@ export default async function OnboardingPage() {
     relationshipIntent: profile?.relationshipIntent ?? "",
     bio: profile?.bio ?? "",
     interests: profile?.interests.join(", ") ?? "",
-    prompt1: profile?.prompt1 ?? "",
-    prompt2: profile?.prompt2 ?? "",
-    prompt3: profile?.prompt3 ?? "",
+    prompts:
+      profile?.promptQuestions.map((question, index) => ({
+        question,
+        answer: profile.promptAnswers[index] ?? "",
+      })) ?? [],
     photos: profile?.photos ?? [],
     streetAddress: profile?.streetAddress ?? "",
     city: profile?.city ?? "",

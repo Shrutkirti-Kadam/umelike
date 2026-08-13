@@ -29,9 +29,8 @@ export async function saveProfile(
     relationshipIntent: formData.get("relationshipIntent"),
     bio: formData.get("bio"),
     interests: formData.get("interests"),
-    prompt1: formData.get("prompt1"),
-    prompt2: formData.get("prompt2"),
-    prompt3: formData.get("prompt3"),
+    promptQuestions: formData.getAll("promptQuestions"),
+    promptAnswers: formData.getAll("promptAnswers"),
     photos: formData
       .getAll("photos")
       .filter((value): value is string => typeof value === "string" && !!value.trim()),

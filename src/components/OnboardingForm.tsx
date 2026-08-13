@@ -8,6 +8,16 @@ import {
   INTERESTED_IN_OPTIONS,
   RELATIONSHIP_OPTIONS,
 } from "@/lib/profile-options";
+import {
+  MAX_PROFILE_PROMPTS,
+  PROFILE_PROMPTS,
+  PROMPTS_PER_PAGE,
+} from "@/lib/prompt-options";
+
+type SelectedPrompt = {
+  question: string;
+  answer: string;
+};
 
 type Defaults = {
   fullName: string;
@@ -19,9 +29,7 @@ type Defaults = {
   relationshipIntent: string;
   bio: string;
   interests: string;
-  prompt1: string;
-  prompt2: string;
-  prompt3: string;
+  prompts: SelectedPrompt[];
   photos: string[];
   streetAddress: string;
   city: string;
@@ -130,26 +138,10 @@ export function OnboardingForm({ defaults }: { defaults: Defaults }) {
           hint="Add 3–10 interests, separated by commas."
         />
 
-        <TextareaField
-          label="A perfect day looks like…"
-          name="prompt1"
-          defaultValue={defaults.prompt1}
-          error={e.prompt1}
-          maxLength={200}
-        />
-        <TextareaField
-          label="Something I value deeply is…"
-          name="prompt2"
-          defaultValue={defaults.prompt2}
-          error={e.prompt2}
-          maxLength={200}
-        />
-        <TextareaField
-          label="The quickest way to make me smile is…"
-          name="prompt3"
-          defaultValue={defaults.prompt3}
-          error={e.prompt3}
-          maxLength={200}
+        <PromptPicker
+          defaultPrompts={defaults.prompts}
+          questionError={e.promptQuestions}
+          answerError={e.promptAnswers}
         />
       </ProfileSection>
 
@@ -235,6 +227,213 @@ export function OnboardingForm({ defaults }: { defaults: Defaults }) {
 
       <SaveButton />
     </form>
+  );
+}
+
+function PromptPicker({
+  defaultPrompts,
+  questionError,
+  answerError,
+}: {
+  defaultPrompts: SelectedPrompt[];
+  questionError?: string;
+  answerError?: string;
+}) {
+  const [selected, setSelected] = useState(() =>
+    defaultPrompts
+      .filter((prompt) =>
+        PROFILE_PROMPTS.includes(prompt.question as (typeof PROFILE_PROMPTS)[number])
+      )
+      .slice(0, MAX_PROFILE_PROMPTS)
+  );
+  const [page, setPage] = useState(0);
+  const totalPages = Math.ceil(PROFILE_PROMPTS.length / PROMPTS_PER_PAGE);
+  const visiblePrompts = PROFILE_PROMPTS.slice(
+    page * PROMPTS_PER_PAGE,
+    (page + 1) * PROMPTS_PER_PAGE
+  );
+  const message = answerError ?? questionError;
+  const atLimit = selected.length >= MAX_PROFILE_PROMPTS;
+
+  function togglePrompt(question: string) {
+    setSelected((current) => {
+      if (current.some((prompt) => prompt.question === question)) {
+        return current.filter((prompt) => prompt.question !== question);
+      }
+      if (current.length >= MAX_PROFILE_PROMPTS) return current;
+      return [...current, { question, answer: "" }];
+    });
+  }
+
+  function updateAnswer(question: string, answer: string) {
+    setSelected((current) =>
+      current.map((prompt) =>
+        prompt.question === question ? { ...prompt, answer } : prompt
+      )
+    );
+  }
+
+  return (
+    <div>
+      <div className="overflow-hidden rounded-soft border border-berry/15 bg-gradient-to-br from-white/70 to-blush/55 shadow-[0_10px_30px_rgba(50,34,48,0.05)]">
+        <div className="flex flex-col gap-2 border-b border-plum/5 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="font-display text-lg font-medium text-plum">
+              Choose your prompts
+            </h3>
+            <p className="mt-0.5 text-sm leading-relaxed text-mauve">
+              Pick at least one and up to four. Five choices are shown at a time.
+            </p>
+          </div>
+          <span
+            className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${
+              atLimit
+                ? "bg-berry text-white"
+                : "border border-berry/20 bg-white/70 text-berry-deep"
+            }`}
+          >
+            {selected.length} / {MAX_PROFILE_PROMPTS} selected
+          </span>
+        </div>
+
+        <div
+          className="grid gap-2.5 p-4 sm:p-5"
+          role="group"
+          aria-label={`Prompt choices, page ${page + 1} of ${totalPages}`}
+          aria-describedby={message ? "prompts-error" : undefined}
+        >
+          {visiblePrompts.map((question, index) => {
+            const isSelected = selected.some((prompt) => prompt.question === question);
+            const isUnavailable = atLimit && !isSelected;
+
+            return (
+              <button
+                key={question}
+                type="button"
+                aria-pressed={isSelected}
+                disabled={isUnavailable}
+                onClick={() => togglePrompt(question)}
+                className={`ease-soft group flex min-h-16 items-center gap-3 rounded-field border px-4 py-3 text-left transition duration-300 ${
+                  isSelected
+                    ? "border-berry bg-berry text-white shadow-[0_7px_18px_rgba(162,89,107,0.18)]"
+                    : isUnavailable
+                      ? "cursor-not-allowed border-plum/5 bg-white/35 text-mauve/45"
+                      : "border-plum/10 bg-white/65 text-plum hover:-translate-y-0.5 hover:border-berry/45 hover:bg-white"
+                }`}
+              >
+                <span
+                  aria-hidden
+                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold transition ${
+                    isSelected
+                      ? "bg-white/20 text-white"
+                      : "bg-berry/10 text-berry-deep group-hover:bg-berry/15"
+                  }`}
+                >
+                  {isSelected ? "✓" : page * PROMPTS_PER_PAGE + index + 1}
+                </span>
+                <span className="text-sm font-medium leading-snug sm:text-[15px]">
+                  {question}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex items-center justify-between border-t border-plum/5 px-4 py-3 sm:px-5">
+          <button
+            type="button"
+            disabled={page === 0}
+            onClick={() => setPage((current) => Math.max(0, current - 1))}
+            className="rounded-full px-3 py-2 text-sm font-medium text-mauve transition hover:bg-plum/5 hover:text-plum disabled:cursor-not-allowed disabled:opacity-35"
+          >
+            ← Previous
+          </button>
+
+          <div
+            className="flex items-center gap-2"
+            aria-label={`Page ${page + 1} of ${totalPages}`}
+          >
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index}
+                type="button"
+                onClick={() => setPage(index)}
+                aria-label={`Show prompt page ${index + 1}`}
+                aria-current={page === index ? "page" : undefined}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  page === index ? "w-6 bg-berry" : "w-2 bg-berry/25 hover:bg-berry/45"
+                }`}
+              />
+            ))}
+          </div>
+
+          <button
+            type="button"
+            disabled={page === totalPages - 1}
+            onClick={() =>
+              setPage((current) => Math.min(totalPages - 1, current + 1))
+            }
+            className="rounded-full px-3 py-2 text-sm font-medium text-mauve transition hover:bg-plum/5 hover:text-plum disabled:cursor-not-allowed disabled:opacity-35"
+          >
+            Next →
+          </button>
+        </div>
+      </div>
+
+      {selected.length > 0 ? (
+        <div className="mt-5 space-y-4">
+          {selected.map((prompt, index) => {
+            const inputId = `prompt-answer-${index}`;
+            return (
+              <div
+                key={prompt.question}
+                className="rounded-soft border border-plum/5 bg-white/55 p-4 shadow-[0_6px_20px_rgba(50,34,48,0.035)] sm:p-5"
+              >
+                <input type="hidden" name="promptQuestions" value={prompt.question} />
+                <div className="flex items-start justify-between gap-4">
+                  <label
+                    htmlFor={inputId}
+                    className="font-display text-lg font-medium leading-snug text-plum"
+                  >
+                    {prompt.question}
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => togglePrompt(prompt.question)}
+                    className="shrink-0 rounded-full px-3 py-1 text-xs font-semibold text-mauve transition hover:bg-berry/10 hover:text-berry-deep"
+                  >
+                    Remove
+                  </button>
+                </div>
+                <textarea
+                  id={inputId}
+                  name="promptAnswers"
+                  required
+                  minLength={10}
+                  maxLength={200}
+                  rows={3}
+                  value={prompt.answer}
+                  onChange={(event) => updateAnswer(prompt.question, event.target.value)}
+                  placeholder="Write something honest and specific…"
+                  aria-invalid={!!answerError}
+                  aria-describedby={message ? "prompts-error" : undefined}
+                  className={`${controlClass(answerError)} mt-3 resize-y`}
+                />
+                <p className="mt-2 text-right text-xs text-mauve/75">
+                  {prompt.answer.length}/200
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="mt-4 rounded-field border border-dashed border-berry/25 bg-berry/[0.035] px-4 py-4 text-center text-sm text-mauve">
+          Choose a prompt above and its answer space will appear here.
+        </div>
+      )}
+
+      {message && <ErrorMessage id="prompts-error" message={message} />}
+    </div>
   );
 }
 

@@ -29,6 +29,7 @@ export default async function ProfilePage({
   const age = profile.birthDate ? getAge(profile.birthDate) : null;
   const completion = getCompletion(profile);
   const mainPhoto = profile.photos[0] ?? session.user.image;
+  const prompts = getProfilePrompts(profile);
 
   return (
     <main className="min-h-dvh px-6 py-10 sm:px-10">
@@ -194,15 +195,18 @@ export default async function ProfilePage({
             />
           </dl>
 
-          <section className="space-y-4 p-7 sm:p-9">
-            <SectionTitle>Three things about me</SectionTitle>
-            <PromptCard question="A perfect day looks like…" answer={profile.prompt1} />
-            <PromptCard question="Something I value deeply is…" answer={profile.prompt2} />
-            <PromptCard
-              question="The quickest way to make me smile is…"
-              answer={profile.prompt3}
-            />
-          </section>
+          {prompts.length > 0 && (
+            <section className="space-y-4 p-7 sm:p-9">
+              <SectionTitle>A few things about me</SectionTitle>
+              {prompts.map((prompt) => (
+                <PromptCard
+                  key={prompt.question}
+                  question={prompt.question}
+                  answer={prompt.answer}
+                />
+              ))}
+            </section>
+          )}
 
           <div className="px-7 pb-7 sm:px-9 sm:pb-9">
             <Link
@@ -276,6 +280,26 @@ function getAge(birthDate: Date) {
   return age;
 }
 
+function getProfilePrompts(profile: ProfileRecord) {
+  const selected = profile.promptQuestions
+    .map((question, index) => ({
+      question,
+      answer: profile.promptAnswers[index] ?? "",
+    }))
+    .filter((prompt) => prompt.question && prompt.answer);
+
+  if (selected.length > 0) return selected;
+
+  return [
+    { question: "A perfect day looks like…", answer: profile.prompt1 ?? "" },
+    { question: "Something I value deeply is…", answer: profile.prompt2 ?? "" },
+    {
+      question: "The quickest way to make me smile is…",
+      answer: profile.prompt3 ?? "",
+    },
+  ].filter((prompt) => prompt.answer);
+}
+
 function getCompletion(profile: ProfileRecord) {
   // `in` keeps this compatible with an editor that still has the previous
   // generated Prisma type cached while retaining the address completion check.
@@ -292,9 +316,7 @@ function getCompletion(profile: ProfileRecord) {
     !!profile.relationshipIntent,
     !!profile.bio,
     profile.interests.length >= 3,
-    !!profile.prompt1,
-    !!profile.prompt2,
-    !!profile.prompt3,
+    getProfilePrompts(profile).length > 0,
     profile.photos.length > 0,
     hasStreetAddress && !!profile.city && !!profile.postalCode,
   ];
