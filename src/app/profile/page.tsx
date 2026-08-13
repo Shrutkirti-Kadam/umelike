@@ -277,6 +277,13 @@ function getAge(birthDate: Date) {
 }
 
 function getCompletion(profile: ProfileRecord) {
+  // `in` keeps this compatible with an editor that still has the previous
+  // generated Prisma type cached while retaining the address completion check.
+  const hasStreetAddress =
+    "streetAddress" in profile &&
+    typeof profile.streetAddress === "string" &&
+    profile.streetAddress.trim().length > 0;
+
   const checks = [
     !!profile.fullName,
     !!profile.birthDate,
@@ -289,7 +296,7 @@ function getCompletion(profile: ProfileRecord) {
     !!profile.prompt2,
     !!profile.prompt3,
     profile.photos.length > 0,
-    !!profile.streetAddress && !!profile.city && !!profile.postalCode,
+    hasStreetAddress && !!profile.city && !!profile.postalCode,
   ];
   return Math.round((checks.filter(Boolean).length / checks.length) * 100);
 }
