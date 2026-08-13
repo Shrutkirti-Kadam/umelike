@@ -12,6 +12,11 @@ import {
 
 export const dynamic = "force-dynamic";
 
+type ProfileWithPrompts = ProfileRecord & {
+  promptQuestions: string[];
+  promptAnswers: string[];
+};
+
 export default async function ProfilePage({
   searchParams,
 }: {
@@ -20,9 +25,9 @@ export default async function ProfilePage({
   const session = await auth();
   if (!session?.user?.id) redirect("/");
 
-  const profile = await prisma.profile.findUnique({
+  const profile = (await prisma.profile.findUnique({
     where: { userId: session.user.id },
-  });
+  })) as ProfileWithPrompts | null;
   if (!profile) redirect("/onboarding");
 
   const justSaved = searchParams.saved === "1";
@@ -280,7 +285,7 @@ function getAge(birthDate: Date) {
   return age;
 }
 
-function getProfilePrompts(profile: ProfileRecord) {
+function getProfilePrompts(profile: ProfileWithPrompts) {
   const selected = profile.promptQuestions
     .map((question, index) => ({
       question,
@@ -300,7 +305,7 @@ function getProfilePrompts(profile: ProfileRecord) {
   ].filter((prompt) => prompt.answer);
 }
 
-function getCompletion(profile: ProfileRecord) {
+function getCompletion(profile: ProfileWithPrompts) {
   // `in` keeps this compatible with an editor that still has the previous
   // generated Prisma type cached while retaining the address completion check.
   const hasStreetAddress =

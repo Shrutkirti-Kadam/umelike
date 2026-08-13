@@ -1,10 +1,16 @@
 import { redirect } from "next/navigation";
+import type { Profile as ProfileRecord } from "@prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { OnboardingForm } from "@/components/OnboardingForm";
 import { BrandLockup } from "@/components/BrandName";
 
 export const dynamic = "force-dynamic";
+
+type ProfileWithPrompts = ProfileRecord & {
+  promptQuestions: string[];
+  promptAnswers: string[];
+};
 
 /**
  * Onboarding — shown right after first sign-in.
@@ -16,9 +22,9 @@ export default async function OnboardingPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/");
 
-  const profile = await prisma.profile.findUnique({
+  const profile = (await prisma.profile.findUnique({
     where: { userId: session.user.id },
-  });
+  })) as ProfileWithPrompts | null;
   const editing = !!profile;
 
   const defaults = {
