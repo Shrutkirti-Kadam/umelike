@@ -29,7 +29,6 @@ type Defaults = {
   relationshipIntent: string;
   bio: string;
   interests: string;
-  prompts: SelectedPrompt[];
   photos: string[];
   streetAddress: string;
   city: string;
@@ -139,7 +138,6 @@ export function OnboardingForm({ defaults }: { defaults: Defaults }) {
         />
 
         <PromptPicker
-          defaultPrompts={defaults.prompts}
           questionError={e.promptQuestions}
           answerError={e.promptAnswers}
         />
@@ -231,21 +229,13 @@ export function OnboardingForm({ defaults }: { defaults: Defaults }) {
 }
 
 function PromptPicker({
-  defaultPrompts,
   questionError,
   answerError,
 }: {
-  defaultPrompts: SelectedPrompt[];
   questionError?: string;
   answerError?: string;
 }) {
-  const [selected, setSelected] = useState(() =>
-    defaultPrompts
-      .filter((prompt) =>
-        PROFILE_PROMPTS.includes(prompt.question as (typeof PROFILE_PROMPTS)[number])
-      )
-      .slice(0, MAX_PROFILE_PROMPTS)
-  );
+  const [selected, setSelected] = useState<SelectedPrompt[]>([]);
   const [page, setPage] = useState(0);
   const totalPages = Math.ceil(PROFILE_PROMPTS.length / PROMPTS_PER_PAGE);
   const visiblePrompts = PROFILE_PROMPTS.slice(
