@@ -159,7 +159,7 @@ export const profileSchema = z.object({
 
   photos: z
     .array(profilePhotoSchema)
-    .max(6, "Add up to 6 photos."),
+    .max(5, "Add up to 5 photos."),
 
   streetAddress: z
     .string()

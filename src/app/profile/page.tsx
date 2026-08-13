@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import type { Profile as ProfileRecord } from "@prisma/client";
 import { auth, signOut } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { BrandLockup } from "@/components/BrandName";
@@ -275,22 +276,7 @@ function getAge(birthDate: Date) {
   return age;
 }
 
-function getCompletion(profile: {
-  fullName: string;
-  birthDate: Date | null;
-  gender: string | null;
-  interestedIn: string[];
-  relationshipIntent: string | null;
-  bio: string | null;
-  interests: string[];
-  prompt1: string | null;
-  prompt2: string | null;
-  prompt3: string | null;
-  photos: string[];
-  streetAddress: string | null;
-  city: string;
-  postalCode: string;
-}) {
+function getCompletion(profile: ProfileRecord) {
   const checks = [
     !!profile.fullName,
     !!profile.birthDate,

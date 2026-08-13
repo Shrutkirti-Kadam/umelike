@@ -155,7 +155,7 @@ export function OnboardingForm({ defaults }: { defaults: Defaults }) {
 
       <ProfileSection
         title="Photos"
-        description="Choose up to six photos from your device. Your first photo is your main one."
+        description="Choose up to five photos from your device. Your first photo is your main one."
       >
         <PhotoUploader defaultPhotos={defaults.photos} error={e.photos} />
       </ProfileSection>
@@ -238,7 +238,7 @@ export function OnboardingForm({ defaults }: { defaults: Defaults }) {
   );
 }
 
-const MAX_PHOTOS = 6;
+const MAX_PHOTOS = 5;
 const MAX_SOURCE_PHOTO_BYTES = 12 * 1024 * 1024;
 const MAX_SAVED_PHOTO_BYTES = 900 * 1024;
 const SUPPORTED_PHOTO_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
@@ -260,7 +260,7 @@ function PhotoUploader({
 
     const available = MAX_PHOTOS - photos.length;
     if (available <= 0) {
-      setUploadError("You can add up to 6 photos.");
+      setUploadError("You can add up to 5 photos.");
       return;
     }
 
@@ -347,7 +347,7 @@ function PhotoUploader({
           {processing
             ? "Preparing your photos…"
             : photos.length >= MAX_PHOTOS
-              ? "All six photo spots are filled"
+              ? "All five photo spots are filled"
               : photos.length
                 ? "Add more photos"
                 : "Choose photos from your device"}
