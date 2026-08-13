@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useId, useRef, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { saveProfile, type SaveProfileState } from "@/actions/profile";
 import {
@@ -480,14 +480,24 @@ function ProfileSection({
   description: string;
   children: React.ReactNode;
 }) {
+  const headingId = useId();
+
   return (
-    <fieldset className="space-y-6 rounded-soft border border-plum/5 bg-white/35 p-5 sm:p-6">
-      <legend className="px-2 font-display text-xl font-medium text-plum">
-        {title}
-      </legend>
-      <p className="-mt-2 text-sm leading-relaxed text-mauve">{description}</p>
-      {children}
-    </fieldset>
+    <section aria-labelledby={headingId} className="space-y-3">
+      <header className="px-1 sm:px-2">
+        <h2
+          id={headingId}
+          className="font-display text-xl font-medium leading-tight text-plum"
+        >
+          {title}
+        </h2>
+        <p className="mt-1 text-sm leading-relaxed text-mauve">{description}</p>
+      </header>
+
+      <div className="space-y-6 rounded-soft border border-plum/5 bg-white/35 p-5 sm:p-6">
+        {children}
+      </div>
+    </section>
   );
 }
 
