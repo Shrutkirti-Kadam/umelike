@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { OnboardingForm } from "@/components/OnboardingForm";
 import { BrandLockup } from "@/components/BrandName";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Onboarding — shown right after first sign-in.
  * Pre-fills from the Google account so the form never starts blank.

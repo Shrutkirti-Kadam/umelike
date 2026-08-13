@@ -9,6 +9,8 @@ import {
   RELATIONSHIP_OPTIONS,
 } from "@/lib/profile-options";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage({
   searchParams,
 }: {

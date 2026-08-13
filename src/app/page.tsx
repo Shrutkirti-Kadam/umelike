@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { GlowBackdrop } from "@/components/GlowBackdrop";
 import { BrandLockup, BrandName } from "@/components/BrandName";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Landing — warm intro, one CTA.
  * Signed-in visitors skip straight to where they left off:
