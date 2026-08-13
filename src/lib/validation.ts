@@ -153,7 +153,7 @@ export const profileSchema = z.object({
       )
     )
     .min(MIN_PROFILE_PROMPTS, "Choose at least one prompt to answer.")
-    .max(MAX_PROFILE_PROMPTS, "Choose up to four prompts.")
+    .max(MAX_PROFILE_PROMPTS, "Choose up to five prompts.")
     .refine((values) => new Set(values).size === values.length, {
       message: "Choose each prompt only once.",
     }),
@@ -167,7 +167,7 @@ export const profileSchema = z.object({
         .max(200, "Keep each answer under 200 characters.")
     )
     .min(MIN_PROFILE_PROMPTS, "Answer at least one prompt.")
-    .max(MAX_PROFILE_PROMPTS, "Answer up to four prompts."),
+    .max(MAX_PROFILE_PROMPTS, "Answer up to five prompts."),
 
   photos: z
     .array(profilePhotoSchema)

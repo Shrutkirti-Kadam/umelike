@@ -272,7 +272,7 @@ function PromptPicker({
               Choose your prompts
             </h3>
             <p className="mt-0.5 text-sm leading-relaxed text-mauve">
-              Pick at least one and up to four. Five choices are shown at a time.
+              Pick at least one and up to five. Five choices are shown at a time.
             </p>
           </div>
           <span

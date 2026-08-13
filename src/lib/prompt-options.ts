@@ -17,6 +17,5 @@ export const PROFILE_PROMPTS = [
 ] as const;
 
 export const MIN_PROFILE_PROMPTS = 1;
-export const MAX_PROFILE_PROMPTS = 4;
+export const MAX_PROFILE_PROMPTS = 5;
 export const PROMPTS_PER_PAGE = 5;
-
