@@ -73,16 +73,13 @@ model Profile {
   prompt3   String?
   photos    String[] @default([])
 
-  // Location is deliberately coarse — city + postal code is enough for
-  // "distance to match" later without storing anyone's front door.
-  city          String
-  postalCode    String
-  maxDistanceKm Int    @default(50)
+  // Only this locality is shown publicly (for example, Sanpada or Vashi).
+  city String
 
-  // To collect a full street address instead, uncomment the line below,
-  // run `npm run db:migrate`, and re-enable the matching field in
-  // src/lib/validation.ts and src/components/OnboardingForm.tsx.
-  // streetAddress String?
+  // Private location details, used only for nearby matching.
+  postalCode    String
+  maxDistanceKm Int     @default(50)
+  streetAddress String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

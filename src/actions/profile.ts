@@ -35,6 +35,7 @@ export async function saveProfile(
     photos: formData
       .getAll("photos")
       .filter((value): value is string => typeof value === "string" && !!value.trim()),
+    streetAddress: formData.get("streetAddress"),
     city: formData.get("city"),
     postalCode: formData.get("postalCode"),
     maxDistanceKm: formData.get("maxDistanceKm"),

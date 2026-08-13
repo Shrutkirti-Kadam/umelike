@@ -35,6 +35,7 @@ export default async function OnboardingPage() {
     prompt2: profile?.prompt2 ?? "",
     prompt3: profile?.prompt3 ?? "",
     photos: profile?.photos ?? [],
+    streetAddress: profile?.streetAddress ?? "",
     city: profile?.city ?? "",
     postalCode: profile?.postalCode ?? "",
     maxDistanceKm: String(profile?.maxDistanceKm ?? 50),

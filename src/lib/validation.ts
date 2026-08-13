@@ -161,11 +161,17 @@ export const profileSchema = z.object({
     .array(profilePhotoSchema)
     .max(6, "Add up to 6 photos."),
 
+  streetAddress: z
+    .string()
+    .trim()
+    .min(10, "Enter your complete residential address.")
+    .max(180, "Keep your address under 180 characters."),
+
   city: z
     .string()
     .trim()
-    .min(2, "Enter your city.")
-    .max(60, "That city name looks too long."),
+    .min(2, "Enter your sub-city or locality.")
+    .max(60, "That locality name looks too long."),
 
   postalCode: z
     .string()
@@ -178,8 +184,6 @@ export const profileSchema = z.object({
     .min(5, "Choose a distance of at least 5 km.")
     .max(500, "Choose a distance up to 500 km."),
 
-  // To collect a full street address, add:
-  // streetAddress: z.string().trim().min(4).max(120),
 });
 
 export type ProfileInput = z.infer<typeof profileSchema>;

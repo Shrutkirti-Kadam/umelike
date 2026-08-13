@@ -91,15 +91,9 @@ One signature motion: the drifting glow on the landing hero (frozen under
 
 ## Decisions to review
 
-**Address → city + postal code (changed from the brief, flagged).**
-The form collects city + postal code instead of a full street address.
-That's enough for distance-based matching later, and it means a leak or
-misuse never exposes anyone's front door — for a dating product the
-downside risk of exact addresses outweighs any current need. If you want
-the full address anyway, it's a three-line change: uncomment
-`streetAddress` in `prisma/schema.prisma`, add the rule in
-`src/lib/validation.ts`, add the field in
-`src/components/OnboardingForm.tsx`, then `npm run db:migrate`.
+**Address privacy.** The form collects a full residential address, postal code,
+and a separate sub-city/locality such as Sanpada or Vashi. Only the locality is
+rendered on a profile; the full address and postal code remain private.
 
 **Phone = private, verification-only.** Stored, never rendered on any
 public surface; the profile page labels it "Private". Wire it to an SMS
@@ -113,4 +107,4 @@ revocable database sessions.
 ## Next steps this sets up
 
 - Phone verification (Twilio Verify or similar) against the stored number
-- Geocode city + postal → lat/lng for distance matching
+- Geocode the private address → lat/lng for distance matching

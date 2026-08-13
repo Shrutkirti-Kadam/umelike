@@ -23,6 +23,7 @@ type Defaults = {
   prompt2: string;
   prompt3: string;
   photos: string[];
+  streetAddress: string;
   city: string;
   postalCode: string;
   maxDistanceKm: string;
@@ -161,16 +162,29 @@ export function OnboardingForm({ defaults }: { defaults: Defaults }) {
 
       <ProfileSection
         title="Your area"
-        description="Location stays intentionally approximate."
+        description="We collect your full address privately. Only your sub-city or locality appears on your profile."
       >
+        <Field
+          label="Full residential address"
+          name="streetAddress"
+          type="text"
+          autoComplete="street-address"
+          defaultValue={defaults.streetAddress}
+          placeholder="Flat, building, street, locality and city"
+          error={e.streetAddress}
+          hint="Private. This is never shown on your profile."
+        />
+
         <div className="grid gap-6 sm:grid-cols-[1.6fr_1fr]">
           <Field
-            label="City"
+            label="Sub-city / locality"
             name="city"
             type="text"
-            autoComplete="address-level2"
+            autoComplete="address-level3"
             defaultValue={defaults.city}
+            placeholder="For example: Sanpada or Vashi"
             error={e.city}
+            hint="This is the only part of your address shown to others."
           />
           <Field
             label="Postal code"
@@ -198,8 +212,8 @@ export function OnboardingForm({ defaults }: { defaults: Defaults }) {
         />
 
         <p className="text-sm leading-relaxed text-mauve">
-          We use your area to help with nearby introductions. Your exact address
-          stays yours.
+          Your full address and postal code stay private and are used only to
+          support nearby introductions.
         </p>
       </ProfileSection>
 

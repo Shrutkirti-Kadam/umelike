@@ -182,8 +182,8 @@ export default async function ProfilePage({
             />
             <Row
               label="Area"
-              value={`${profile.city} · ${profile.postalCode}`}
-              note={`Preferred distance: within ${profile.maxDistanceKm} km. Exact location stays private.`}
+              value={profile.city}
+              note={`Preferred distance: within ${profile.maxDistanceKm} km. Full address and postal code stay private.`}
             />
             <Row
               label="Phone"
@@ -287,6 +287,7 @@ function getCompletion(profile: {
   prompt2: string | null;
   prompt3: string | null;
   photos: string[];
+  streetAddress: string | null;
   city: string;
   postalCode: string;
 }) {
@@ -302,7 +303,7 @@ function getCompletion(profile: {
     !!profile.prompt2,
     !!profile.prompt3,
     profile.photos.length > 0,
-    !!profile.city && !!profile.postalCode,
+    !!profile.streetAddress && !!profile.city && !!profile.postalCode,
   ];
   return Math.round((checks.filter(Boolean).length / checks.length) * 100);
 }
