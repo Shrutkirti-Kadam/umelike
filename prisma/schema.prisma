@@ -1,0 +1,89 @@
+// umelike — data model
+// Standard Auth.js (NextAuth) models + a Profile table for onboarding data.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Auth.js models (required by @auth/prisma-adapter) ────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  profile       Profile?
+  createdAt     DateTime  @default(now())
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// ── umelike profile (filled in during onboarding) ────────────────────
+
+model Profile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  fullName  String
+  // Private: used for account verification only. Never rendered on any
+  // public-facing surface.
+  phone     String
+  birthDate DateTime?
+
+  gender             String?
+  pronouns           String?
+  interestedIn       String[] @default([])
+  relationshipIntent String?
+
+  bio       String?
+  interests String[] @default([])
+  prompt1   String?
+  prompt2   String?
+  prompt3   String?
+  photos    String[] @default([])
+
+  // Location is deliberately coarse — city + postal code is enough for
+  // "distance to match" later without storing anyone's front door.
+  city          String
+  postalCode    String
+  maxDistanceKm Int    @default(50)
+
+  // To collect a full street address instead, uncomment the line below,
+  // run `npm run db:migrate`, and re-enable the matching field in
+  // src/lib/validation.ts and src/components/OnboardingForm.tsx.
+  // streetAddress String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

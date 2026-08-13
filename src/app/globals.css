@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ─────────────────────────────────────────────────────────── */
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-ivory text-plum font-sans antialiased;
+}
+
+::selection {
+  background: rgba(217, 160, 91, 0.35); /* soft gold */
+}
+
+/* Keyboard focus — visible everywhere, styled once.
+   A gold ring reads as light catching an edge, not a system default. */
+:focus-visible {
+  outline: 2px solid #d9a05b;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Signature: the golden-hour glow ──────────────────────────────────
+   Three large blurred blobs (gold, berry, plum-dusk) drift slowly behind
+   the landing hero, like watching a sunset shift. Used once, on the
+   landing page only. ~1 minute per cycle: ambient, not animated-feeling. */
+
+.glow-backdrop {
+  background: #f4eadc;
+  isolation: isolate;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(clamp(62px, 6vw, 112px)) saturate(1.18);
+  /* Multiply lets intersecting fields form a genuine third shade instead
+     of one translucent layer simply covering the other. */
+  mix-blend-mode: multiply;
+  transition: opacity 700ms ease;
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.glow--gold {
+  background: radial-gradient(circle, rgba(203, 126, 40, 0.74), transparent 66%);
+}
+.glow--berry {
+  background: radial-gradient(circle, rgba(132, 50, 78, 0.66), transparent 67%);
+}
+.glow--dusk {
+  background: radial-gradient(circle, rgba(111, 83, 121, 0.55), transparent 67%);
+}
+.glow--peach {
+  background: radial-gradient(circle, rgba(211, 139, 82, 0.63), transparent 68%);
+}
+
+/* ── Quiet motion elsewhere ───────────────────────────────────────── */
+
+.ease-soft {
+  transition-timing-function: cubic-bezier(0.25, 0.8, 0.35, 1);
+}
+
+/* Gentle entrance for page content */
+.rise-in {
+  animation: rise 700ms cubic-bezier(0.25, 0.8, 0.35, 1) both;
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Reduced motion: freeze the sunset, skip the entrances ────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .rise-in {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
