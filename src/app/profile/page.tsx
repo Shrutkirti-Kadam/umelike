@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import type { Profile as ProfileRecord } from "@prisma/client";
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { BrandLockup } from "@/components/BrandName";
+import { UserMenu } from "@/components/dashboard/UserMenu";
 import {
-  GENDER_OPTIONS,
   INTERESTED_IN_OPTIONS,
   RELATIONSHIP_OPTIONS,
 } from "@/lib/profile-options";
@@ -30,240 +30,268 @@ export default async function ProfilePage({
   })) as ProfileWithPrompts | null;
   if (!profile) redirect("/onboarding");
 
-  const justSaved = searchParams.saved === "1";
   const age = profile.birthDate ? getAge(profile.birthDate) : null;
+  const prompts = getProfilePrompts(profile);
   const completion = getCompletion(profile);
   const mainPhoto = profile.photos[0] ?? session.user.image;
-  const prompts = getProfilePrompts(profile);
+  const displayName = profile.fullName || session.user.name || "Your account";
+  const firstName = displayName.trim().split(/\s+/)[0];
+  const relationshipIntent = profile.relationshipIntent
+    ? optionLabel(RELATIONSHIP_OPTIONS, profile.relationshipIntent)
+    : null;
+  const interestedIn = profile.interestedIn.map((value) =>
+    optionLabel(INTERESTED_IN_OPTIONS, value)
+  );
+  const status = getProfileStatus(completion);
 
   return (
-    <main className="min-h-dvh px-6 py-10 sm:px-10">
-      <div className="rise-in mx-auto max-w-3xl">
-        <div className="flex items-center justify-between">
+    <main className="profile-dashboard">
+      <div className="profile-ambient" aria-hidden="true">
+        <span className="profile-ambient__glow profile-ambient__glow--one" />
+        <span className="profile-ambient__glow profile-ambient__glow--two" />
+        <span className="profile-ambient__glow profile-ambient__glow--three" />
+        <span className="profile-ambient__grain" />
+      </div>
+
+      <nav className="profile-nav" aria-label="Authenticated navigation">
+        <Link href="/profile" aria-label="umelike profile home">
           <BrandLockup
-            markClassName="h-8 w-8"
-            wordmarkClassName="font-display text-xl font-semibold tracking-tight"
+            markClassName="h-9 w-9"
+            wordmarkClassName="font-display text-xl font-semibold tracking-tight text-[#F5F1EA]"
           />
-          <form
-            action={async () => {
-              "use server";
-              await signOut({ redirectTo: "/" });
-            }}
-          >
-            <button
-              type="submit"
-              className="ease-soft rounded-full px-4 py-2 text-sm font-medium text-mauve transition duration-300 hover:bg-plum/5 hover:text-plum"
-            >
-              Sign out
-            </button>
-          </form>
+        </Link>
+
+        <div className="profile-nav__links">
+          <Link href="/profile" aria-current="page">
+            Profile
+          </Link>
+          <Link href="/onboarding">Edit profile</Link>
         </div>
 
-        {justSaved && (
-          <p
-            role="status"
-            className="rise-in mt-8 rounded-field border border-gold/40 bg-gold/15 px-4 py-3 text-sm font-medium"
-          >
-            Profile saved.
+        <UserMenu
+          name={displayName}
+          email={session.user.email ?? undefined}
+          image={mainPhoto ?? undefined}
+        />
+      </nav>
+
+      {searchParams.saved === "1" && (
+        <div className="profile-saved" role="status">
+          <span aria-hidden="true">✓</span>
+          Your profile changes were saved.
+        </div>
+      )}
+
+      <section className="profile-hero" aria-labelledby="profile-hero-title">
+        <div className="profile-hero__copy rise-in">
+          <p className="profile-eyebrow">Welcome back, {firstName}</p>
+          <h1 id="profile-hero-title">
+            Make your profile
+            <br />
+            <em>feel like you.</em>
+          </h1>
+          <p className="profile-hero__intro">
+            A thoughtful profile makes room for the right kind of connection.
+            See what is shining and what you can refine.
           </p>
-        )}
+          <Link href="/onboarding" className="profile-primary-cta">
+            {completion < 100 ? "Continue your profile" : "Edit your profile"}
+            <span aria-hidden="true">↗</span>
+          </Link>
+        </div>
 
-        <section className="mt-8 rounded-soft border border-plum/5 bg-white/45 p-5 shadow-[0_8px_40px_rgba(50,34,48,0.05)] sm:p-6">
-          <div className="flex items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-medium text-plum">Profile completion</p>
-              <p className="mt-1 text-sm text-mauve">
-                {completion === 100
-                  ? "Everything is ready."
-                  : "Add the missing details to complete your profile."}
-              </p>
-            </div>
-            <span className="font-display text-2xl font-semibold text-berry">
-              {completion}%
-            </span>
-          </div>
-          <div
-            className="mt-4 h-2 overflow-hidden rounded-full bg-blush"
-            role="progressbar"
-            aria-label="Profile completion"
-            aria-valuemin={0}
-            aria-valuemax={100}
-            aria-valuenow={completion}
+        <div className="profile-stage">
+          <div className="profile-orbit profile-orbit--one" aria-hidden="true" />
+          <div className="profile-orbit profile-orbit--two" aria-hidden="true" />
+
+          <article
+            id="profile-preview"
+            className="profile-preview-card"
+            aria-label={`${displayName}'s profile preview`}
           >
-            <div
-              className="h-full rounded-full bg-berry transition-[width] duration-500"
-              style={{ width: `${completion}%` }}
-            />
-          </div>
-        </section>
-
-        <article className="mt-6 overflow-hidden rounded-soft border border-plum/5 bg-blush/60 shadow-[0_8px_40px_rgba(50,34,48,0.06)]">
-          <div className="flex items-center gap-5 border-b border-plum/5 p-7 sm:p-9">
-            {mainPhoto ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={mainPhoto}
-                alt=""
-                width={88}
-                height={88}
-                className="h-[88px] w-[88px] rounded-soft border-2 border-white object-cover shadow-sm"
-                referrerPolicy="no-referrer"
-              />
-            ) : (
-              <div className="flex h-[88px] w-[88px] items-center justify-center rounded-soft bg-gold/30 font-display text-3xl font-semibold">
-                {profile.fullName[0]}
-              </div>
-            )}
-            <div className="min-w-0">
-              <h1 className="font-display text-3xl font-medium tracking-tight sm:text-4xl">
-                {profile.fullName}
-                {age !== null && <span className="font-normal text-mauve">, {age}</span>}
-              </h1>
-              <p className="mt-1 text-mauve">
-                {profile.gender
-                  ? optionLabel(GENDER_OPTIONS, profile.gender)
-                  : "Gender not added"}
-                {profile.pronouns ? ` · ${profile.pronouns}` : ""}
-              </p>
-              <p className="mt-1 truncate text-sm text-mauve/75">{session.user.email}</p>
+            <div className="profile-preview-card__bar">
+              <span>Profile preview</span>
+              <span className="profile-preview-card__live">
+                <i aria-hidden="true" /> Saved
+              </span>
             </div>
-          </div>
 
-          {profile.photos.length > 0 && (
-            <section className="border-b border-plum/5 p-7 sm:p-9">
-              <SectionTitle>Photos</SectionTitle>
-              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                {profile.photos.map((photo, index) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={`${photo}-${index}`}
-                    src={photo}
-                    alt={`${profile.fullName}'s profile photo ${index + 1}`}
-                    className="aspect-[4/5] w-full rounded-field bg-white object-cover"
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
-                  />
-                ))}
-              </div>
-            </section>
-          )}
-
-          <section className="border-b border-plum/5 p-7 sm:p-9">
-            <SectionTitle>About</SectionTitle>
-            <p className="mt-3 whitespace-pre-wrap leading-relaxed text-plum">
-              {profile.bio ?? "Add a short bio to tell people more about you."}
-            </p>
-
-            {profile.interests.length > 0 && (
-              <div className="mt-5 flex flex-wrap gap-2">
-                {profile.interests.map((interest) => (
-                  <span
-                    key={interest}
-                    className="rounded-full border border-berry/20 bg-white/55 px-3 py-1.5 text-sm text-berry-deep"
-                  >
-                    {interest}
-                  </span>
-                ))}
-              </div>
-            )}
-          </section>
-
-          <dl className="divide-y divide-plum/5 border-b border-plum/5">
-            <Row
-              label="Looking for"
-              value={
-                profile.relationshipIntent
-                  ? optionLabel(RELATIONSHIP_OPTIONS, profile.relationshipIntent)
-                  : "Not added"
-              }
-            />
-            <Row
-              label="Interested in"
-              value={
-                profile.interestedIn.length
-                  ? profile.interestedIn
-                      .map((value) => optionLabel(INTERESTED_IN_OPTIONS, value))
-                      .join(", ")
-                  : "Not added"
-              }
-            />
-            <Row
-              label="Area"
-              value={profile.city}
-              note={`Preferred distance: within ${profile.maxDistanceKm} km. Full address and postal code stay private.`}
-            />
-            <Row
-              label="Phone"
-              value={profile.phone}
-              badge="Private"
-              note="Only used for account verification."
-            />
-          </dl>
-
-          {prompts.length > 0 && (
-            <section className="space-y-4 p-7 sm:p-9">
-              <SectionTitle>A few things about me</SectionTitle>
-              {prompts.map((prompt) => (
-                <PromptCard
-                  key={prompt.question}
-                  question={prompt.question}
-                  answer={prompt.answer}
+            <div className="profile-preview-card__photo">
+              {mainPhoto ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={mainPhoto}
+                  alt={`${displayName}'s main profile photo`}
+                  referrerPolicy="no-referrer"
                 />
-              ))}
-            </section>
-          )}
+              ) : (
+                <div className="profile-preview-card__fallback" aria-hidden="true">
+                  <span>{getInitials(displayName)}</span>
+                </div>
+              )}
+              <div className="profile-preview-card__photo-shade" />
+              <div className="profile-preview-card__identity">
+                <h2>
+                  {displayName}
+                  {age !== null && <span>, {age}</span>}
+                </h2>
+                <p>
+                  {profile.city}
+                  {profile.pronouns ? ` · ${profile.pronouns}` : ""}
+                </p>
+              </div>
+            </div>
 
-          <div className="px-7 pb-7 sm:px-9 sm:pb-9">
-            <Link
-              href="/onboarding"
-              className="ease-soft inline-block rounded-full border border-berry/40 px-6 py-3 text-sm font-medium text-berry transition duration-300 hover:bg-berry hover:text-ivory"
+            <div className="profile-preview-card__body">
+              {relationshipIntent && (
+                <p className="profile-intention">
+                  <span aria-hidden="true">♡</span>
+                  {relationshipIntent}
+                </p>
+              )}
+
+              {profile.bio && <p className="profile-bio">{profile.bio}</p>}
+
+              {profile.interests.length > 0 && (
+                <ul className="profile-interest-list" aria-label="Interests">
+                  {profile.interests.slice(0, 3).map((interest) => (
+                    <li key={interest}>{interest}</li>
+                  ))}
+                  {profile.interests.length > 3 && (
+                    <li aria-label={`${profile.interests.length - 3} more interests`}>
+                      +{profile.interests.length - 3}
+                    </li>
+                  )}
+                </ul>
+              )}
+
+              {prompts[0] && (
+                <div className="profile-prompt-preview">
+                  <p>{prompts[0].question}</p>
+                  <blockquote>{prompts[0].answer}</blockquote>
+                </div>
+              )}
+            </div>
+          </article>
+
+          <aside className="profile-float-card profile-float-card--completion">
+            <span className="profile-float-card__icon" aria-hidden="true">✦</span>
+            <div>
+              <p>Profile completion</p>
+              <strong>{completion}%</strong>
+            </div>
+            <div
+              className="profile-mini-progress"
+              role="progressbar"
+              aria-label="Profile completion"
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={completion}
             >
-              Edit profile
-            </Link>
+              <span style={{ width: `${completion}%` }} />
+            </div>
+          </aside>
+
+          <aside className="profile-float-card profile-float-card--photos">
+            <span className="profile-float-card__label">Photos</span>
+            <strong>{profile.photos.length} / 5</strong>
+            <p>{profile.photos.length ? "moments added" : "ready for your first"}</p>
+          </aside>
+
+          <aside className="profile-float-card profile-float-card--prompts">
+            <span className="profile-float-card__label">Prompts</span>
+            <strong>{prompts.length} / 5</strong>
+            <p>{prompts.length === 1 ? "answer shared" : "answers shared"}</p>
+          </aside>
+
+          <aside className="profile-float-card profile-float-card--status">
+            <span className="profile-status-dot" aria-hidden="true" />
+            <div>
+              <span className="profile-float-card__label">Profile status</span>
+              <strong>{status}</strong>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section className="profile-next" aria-labelledby="profile-next-title">
+        <div className="profile-next__heading">
+          <div>
+            <p className="profile-eyebrow">Your profile, piece by piece</p>
+            <h2 id="profile-next-title">Make a profile worth stopping for.</h2>
           </div>
-        </article>
-      </div>
+          <p>
+            Keep each part honest, specific, and unmistakably yours. Every card
+            below opens your existing profile editor.
+          </p>
+        </div>
+
+        <div className="profile-action-grid" id="profile-details">
+          <ProfileActionCard
+            number="01"
+            title="Photos"
+            description={`${profile.photos.length} of 5 added`}
+            state={profile.photos.length > 0 ? "Added" : "Add photos"}
+          />
+          <ProfileActionCard
+            number="02"
+            title="Prompts"
+            description={`${prompts.length} of 5 answered`}
+            state={prompts.length > 0 ? "Answered" : "Add an answer"}
+          />
+          <ProfileActionCard
+            number="03"
+            title="About you"
+            description={`${profile.interests.length} interests shared`}
+            state={profile.bio && profile.interests.length >= 3 ? "Ready" : "Keep going"}
+          />
+          <ProfileActionCard
+            number="04"
+            title="Preferences"
+            description={
+              relationshipIntent && interestedIn.length
+                ? relationshipIntent
+                : "Tell us what feels right"
+            }
+            state={relationshipIntent && interestedIn.length ? "Set" : "Add details"}
+          />
+        </div>
+      </section>
+
+      <footer className="profile-footer">
+        <BrandLockup
+          markClassName="h-7 w-7"
+          wordmarkClassName="font-display text-lg font-semibold text-[#F5F1EA]"
+        />
+        <p>Your details stay private until you choose otherwise.</p>
+      </footer>
     </main>
   );
 }
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <h2 className="font-display text-2xl font-medium">{children}</h2>;
-}
-
-function PromptCard({ question, answer }: { question: string; answer: string | null }) {
-  return (
-    <div className="rounded-field border border-plum/5 bg-white/45 p-5">
-      <p className="text-sm font-medium text-mauve">{question}</p>
-      <p className="mt-2 leading-relaxed">{answer ?? "Not answered yet."}</p>
-    </div>
-  );
-}
-
-function Row({
-  label,
-  value,
-  badge,
-  note,
+function ProfileActionCard({
+  number,
+  title,
+  description,
+  state,
 }: {
-  label: string;
-  value: string;
-  badge?: string;
-  note?: string;
+  number: string;
+  title: string;
+  description: string;
+  state: string;
 }) {
   return (
-    <div className="px-7 py-5 sm:px-9">
-      <dt className="flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-mauve">
-        {label}
-        {badge && (
-          <span className="rounded-full bg-plum/5 px-2 py-0.5 text-[10px] font-semibold normal-case tracking-normal text-plum/70">
-            {badge}
-          </span>
-        )}
-      </dt>
-      <dd className="mt-1.5 text-lg">{value}</dd>
-      {note && <p className="mt-1 text-sm text-mauve">{note}</p>}
-    </div>
+    <Link href="/onboarding" className="profile-action-card">
+      <span className="profile-action-card__number">{number}</span>
+      <div>
+        <h3>{title}</h3>
+        <p>{description}</p>
+      </div>
+      <div className="profile-action-card__footer">
+        <span>{state}</span>
+        <i aria-hidden="true">↗</i>
+      </div>
+    </Link>
   );
 }
 
@@ -283,6 +311,15 @@ function getAge(birthDate: Date) {
       today.getUTCDate() >= birthDate.getUTCDate());
   if (!birthdayHasPassed) age -= 1;
   return age;
+}
+
+function getInitials(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("") || "U";
 }
 
 function getProfilePrompts(profile: ProfileWithPrompts) {
@@ -306,8 +343,6 @@ function getProfilePrompts(profile: ProfileWithPrompts) {
 }
 
 function getCompletion(profile: ProfileWithPrompts) {
-  // `in` keeps this compatible with an editor that still has the previous
-  // generated Prisma type cached while retaining the address completion check.
   const hasStreetAddress =
     "streetAddress" in profile &&
     typeof profile.streetAddress === "string" &&
@@ -326,4 +361,11 @@ function getCompletion(profile: ProfileWithPrompts) {
     hasStreetAddress && !!profile.city && !!profile.postalCode,
   ];
   return Math.round((checks.filter(Boolean).length / checks.length) * 100);
+}
+
+function getProfileStatus(completion: number) {
+  if (completion === 100) return "Ready to shine";
+  if (completion >= 80) return "Looking strong";
+  if (completion >= 60) return "Coming together";
+  return "Needs a little love";
 }
