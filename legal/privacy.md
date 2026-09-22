@@ -1,8 +1,8 @@
 # Privacy Policy
 
-**umelike** · Working draft · 15 September 2026
+**umelike** · Working draft · 22 September 2026
 
-> Draft for legal review. This version is aligned to the current umelike system and the P7D4 privacy follow-up migration. It is not legal advice. Before publication, replace every bracketed placeholder, confirm the contact inboxes work, and have qualified counsel review it.
+> Draft for legal review. This version is aligned to the current umelike system, including display-name privacy, account deletion, and the moderation system. It is not legal advice. Before publication, replace every bracketed placeholder, confirm the contact inboxes work, set final retention periods, and have qualified counsel review it.
 
 ---
 
@@ -11,6 +11,7 @@
 - We collect the information needed to run a dating service, keep it safe, and operate your account.
 - Other members do not receive your full real name. They see your chosen display name, or your first name if you have not set one.
 - Location is stored only after being rounded to two decimal places, and other members receive a derived distance or neighbourhood rather than your stored coordinates.
+- Reports, moderation records, filtered-message events, and limited account identifiers may be retained where needed for safety, fraud prevention, and enforcement.
 - You can request a copy of core account data and you can delete your account. Account deletion has a 14-day restoration period before permanent purge.
 - We do not sell your personal data or share it with data brokers.
 
@@ -60,6 +61,35 @@ If **Show Last Active Status** is enabled, umelike stores a private raw activity
 
 We process service activity such as likes, passes, matches, messages, rewinds, Discover refreshes, blocks, reports, and related timestamps or counters required to operate those features.
 
+### Safety reports and moderation records
+
+If a member is reported, or if staff take a moderation action, UmeLike may store safety and moderation information such as:
+
+- the reporting and reported account identifiers;
+- report reason and optional details;
+- moderation notices or warnings shown to the member;
+- suspension or ban status and related timestamps;
+- internal staff reasons, notes, and action history;
+- report-resolution information;
+- verification-revocation history where moderation requires it; and
+- signals used to help moderators review an account, such as prior reports, prior actions, recent display-name changes, or filtered-message events.
+
+Moderation tools are restricted to authorised staff accounts through server-side role checks. Ordinary members cannot access another person's internal moderation record.
+
+### Message filtering
+
+UmeLike uses a server-side message filter to block configured prohibited terms before a message is delivered.
+
+When a message is refused by the filter, UmeLike may record a limited filtered-message event for moderation, abuse prevention, and rate-limit purposes. Repeated filtered-message attempts can result in an automatic warning or additional review.
+
+The recipient does not receive a message that the filter refused.
+
+### Banned-account identifiers
+
+When an account is banned, UmeLike may store a one-way hash of the sign-in email address in a banned-identity record so a newly created account using the same email can be recognised for safety enforcement.
+
+The stored value is a hash rather than the original email address. It is used for abuse prevention and moderation, not for member-facing features.
+
 ### Selfie verification
 
 If you choose Selfie Verification, we store a verification selfie in private storage for human review. It is not shown on your profile. The current system schedules the verification selfie for deletion 30 days after review; the verification outcome may remain on your account.
@@ -86,6 +116,7 @@ UmeLike contains subscription infrastructure for Platinum. Real Google Play purc
 | A coarse activity status if both sides' settings allow it | Your raw activity timestamp or timezone |
 | Whether your profile is verified | Your verification selfie |
 | Public profile information needed for Discover, Likes and existing matches | Your private preferences and account settings |
+| Account-facing notices or lockout messages that UmeLike sends directly to you | Another member's reports, staff notes, moderation history, or internal safety signals |
 
 UmeLike enforces this separation in the database as well as in the Flutter interface. Public profile reads use a restricted public-profile path, while the underlying profile row containing private fields is owner-only for ordinary authenticated users.
 
@@ -100,6 +131,8 @@ We use personal data to:
 - deliver messages, typing state, matches, and push notifications;
 - enforce blocks, unmatches, limits, match expiry, and other service rules;
 - review reports and optional selfie-verification submissions;
+- operate moderation, including notices, warnings, suspensions, bans, message filtering, and staff audit records;
+- detect and limit abusive or previously banned accounts returning;
 - detect a previously deleted account returning when safety reports existed;
 - operate membership entitlements and, if enabled, Google Play subscriptions;
 - diagnose crashes and reliability problems when diagnostics are enabled; and
@@ -115,10 +148,10 @@ UmeLike uses third-party providers to operate the service. The final published v
 
 Current or planned providers include:
 
-- **Supabase** — authentication, PostgreSQL database services, Realtime, and file storage.
+- **Supabase** — authentication, PostgreSQL database services, Realtime, file storage, server-side functions, and moderation data storage.
 - **Resend** — transactional authentication email delivery, including sign-in codes.
 - **Google** — optional Google sign-in; Firebase Cloud Messaging for push delivery; Firebase Crashlytics when diagnostics are enabled; and Google Play for subscriptions if paid Platinum is enabled.
-- **[website hosting provider]** — hosting for the public privacy, terms, and account-deletion website. Replace this placeholder with the actual production host before publication.
+- **Vercel** — hosting for the public account, privacy, terms, and account-deletion website.
 
 Each provider processes data according to its own terms and privacy commitments. If UmeLike changes processors, this policy should be updated accordingly.
 
@@ -132,8 +165,10 @@ UmeLike uses technical controls intended to limit who can access personal data, 
 - an owner-only base profile table for private profile fields;
 - a restricted public-profile view for fields another member is allowed to receive;
 - private storage for verification selfies;
-- server-side matching, block, and relationship checks before public-profile data is returned; and
-- server-side RPCs for sensitive actions such as export, deletion, restoration, verification, and quota enforcement.
+- server-side matching, block, standing, and relationship checks before social actions are allowed;
+- server-side RPCs for sensitive actions such as export, deletion, restoration, verification, moderation, and quota enforcement;
+- staff-role checks for moderation tools and internal moderation data; and
+- server-side message filtering and rate limits before a message is accepted.
 
 No system can promise absolute security. If we discover a security incident that requires notification under applicable law, we will handle it accordingly.
 
@@ -148,11 +183,13 @@ No system can promise absolute security. If we discover a security incident that
 | Silent match after it ends | Removed 30 days after the match ends |
 | Raw activity timestamp | Kept while Last Active is enabled; removed when that setting is turned off or the account is purged |
 | Successful export audit row | Retained as an operational/rate-limit record; a final retention period should be set before launch |
-| Firebase Crashlytics crash data | Firebase states that Crashlytics crash stack traces and associated identifiers are retained for 90 days before deletion begins |
 | Safety reports involving a deleted account | Retained after account deletion for safety and abuse-prevention purposes; a final retention period should be set with counsel |
+| Moderation actions, staff notes, notices, warnings, suspensions, bans, and filtered-message audit events | Retained as safety, enforcement, and audit records; a final retention period should be set before launch |
+| Banned-identity email hash | Retained for abuse-prevention and ban-enforcement purposes; a final retention period should be set before launch |
 | Deleted-account safety tombstone | Historical account UUID, one-way email hash, deletion time, and report count are retained for returning-account safety checks; real name, age, and original account-created time are not retained after the P7D4 privacy follow-up |
+| Firebase Crashlytics crash data | Firebase states that Crashlytics crash stack traces and associated identifiers are retained for 90 days before deletion begins |
 
-Before launch, UmeLike should adopt explicit retention periods for safety reports, deleted-account tombstones, and export audit rows rather than leaving them open-ended.
+Before launch, UmeLike should adopt explicit retention periods for safety reports, moderation records, banned-identity records, deleted-account tombstones, filtered-message audit rows, and export audit rows rather than leaving them open-ended.
 
 ---
 
@@ -162,13 +199,13 @@ Before launch, UmeLike should adopt explicit retention periods for safety report
 
 A successful self-service export is limited to once every rolling 24 hours.
 
-The self-service export is not described as a copy of every internal safety, moderation, security, or operational record. For a broader privacy-rights request, contact **privacy@umelike.in**.
+The self-service export is not described as a copy of every internal safety, moderation, security, fraud-prevention, staff-note, or operational record. For a broader privacy-rights request, contact **privacy@umelike.in**.
 
 ---
 
 ## 9. Deleting your account
 
-You can initiate deletion from the app. Once the external account site is deployed, you will also be able to initiate deletion at **https://umelike.in/delete-account** without reinstalling the app.
+You can initiate deletion from the app or at **https://umelike.in/delete-account**.
 
 ### Immediately after requesting deletion
 
@@ -187,9 +224,13 @@ The purge removes the account's profile, photos, verification submission data, m
 
 ### Information retained for safety
 
-Reports involving the account intentionally survive deletion. UmeLike also keeps a minimal deleted-account safety record containing the historical account UUID, a one-way hash of the email address, deletion time, and number of reports against the account. This is used to help flag a returning account associated with prior safety reports.
+Reports involving the account intentionally survive deletion. UmeLike may also retain moderation and enforcement records that are needed for safety, fraud prevention, legal obligations, or abuse prevention.
 
-We retain safety information only for legitimate safety, fraud-prevention, legal, or regulatory purposes as applicable. The final published policy should state a defined retention period approved by counsel.
+UmeLike keeps a minimal deleted-account safety record containing the historical account UUID, a one-way hash of the email address, deletion time, and number of reports against the account. A banned account may also leave a one-way banned-identity email hash used to recognise attempts to return with the same sign-in email.
+
+Real name, age, and original account-created time are not retained in the deleted-account safety tombstone.
+
+We retain safety information only for legitimate safety, fraud-prevention, legal, or regulatory purposes as applicable. The final published policy should state defined retention periods approved by counsel.
 
 ---
 
@@ -212,7 +253,7 @@ For privacy requests that are not covered by the self-service controls, contact 
 
 ## 11. Age
 
-UmeLike is intended only for people aged 18 or older. If we determine that an account belongs to someone under 18, we may remove the account and associated data as required by our safety obligations and applicable law.
+UmeLike is intended only for people aged 18 or older. If we determine that an account belongs to someone under 18, we may restrict or remove the account and handle associated data as required by our safety obligations and applicable law.
 
 ---
 

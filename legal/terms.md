@@ -1,8 +1,8 @@
 # Terms of Service
 
-**umelike** · Working draft · 15 September 2026
+**umelike** · Working draft · 22 September 2026
 
-> Draft for legal review. Prepared against the current umelike system. It is not legal advice. Before publication, replace every bracketed placeholder and have qualified counsel review the entire agreement, especially governing law, dispute venue, liability, consumer rights, and subscription language.
+> Draft for legal review. Prepared against the current umelike system, including the moderation and message-filtering features. It is not legal advice. Before publication, replace every bracketed placeholder and have qualified counsel review the entire agreement, especially governing law, dispute venue, liability, consumer rights, moderation/appeal language, and subscription language.
 
 ---
 
@@ -40,24 +40,29 @@ Do not:
 
 - harass, threaten, stalk, intimidate, or abuse another person;
 - send sexual or intimate content that the recipient did not ask for;
+- send hateful, threatening, abusive, or otherwise prohibited content;
 - impersonate another person or misrepresent material facts about yourself;
 - ask members for money as part of a scam or deceptive scheme;
 - use UmeLike primarily to advertise, solicit, or promote unrelated commercial activity;
 - scrape, harvest, sell, republish, or misuse another member's information;
 - attempt to contact a member through UmeLike after they have blocked you; or
-- interfere with safety, moderation, access-control, payment, quota, or technical safeguards.
+- interfere with safety, moderation, access-control, payment, quota, message-filtering, or technical safeguards.
 
-UmeLike may investigate reports and restrict, suspend, or remove accounts that violate these Terms or create a safety risk.
+UmeLike may investigate reports and restrict, warn, suspend, ban, or remove accounts that violate these Terms or create a safety, abuse, fraud, or security risk.
 
 ---
 
 ## 5. Likes, matches, messages, and blocks
 
-Free accounts may be subject to daily or periodic feature limits shown in the app, including limits related to likes, rewinds, or Discover refreshes.
+Free accounts may be subject to daily or periodic feature limits shown in the app, including limits related to likes, rewinds, Discover refreshes, reports, or message sending where safety and abuse controls require them.
 
 A match in which neither person sends a first message currently expires after five days. Once a first message is sent, that silent-match expiry no longer applies. Ended matches may remain visible for a period before server-side purge according to the current product rules.
 
 Blocking is intended to prevent the blocked account from being shown to or interacting with you through UmeLike. Unmatching ends the match and conversation relationship according to the current app behaviour.
+
+Messages are subject to server-side safety and technical checks. A message may be refused instead of delivered if it contains a configured prohibited term, violates a rate limit, comes from an account that is not in good standing, targets an inactive account, or otherwise fails a server-side safety rule.
+
+Repeated attempts to send filtered content can result in an automatic warning or additional moderation review.
 
 ---
 
@@ -73,7 +78,7 @@ If Platinum is sold through Google Play, Google Play will handle payment process
 
 ## 7. Your data and privacy
 
-The **Privacy Policy** explains what UmeLike collects, how it is used, what other members can see, the service providers involved, retention, data export, and account deletion. The Privacy Policy forms part of these Terms.
+The **Privacy Policy** explains what UmeLike collects, how it is used, what other members can see, the service providers involved, moderation and safety records, retention, data export, and account deletion. The Privacy Policy forms part of these Terms.
 
 ---
 
@@ -85,15 +90,15 @@ Pausing hides your profile from new discovery while preserving the account and e
 
 Account deletion starts a 14-day restoration period. During that period the account is hidden and inactive. If you restore before the deadline, the deletion request is cancelled. After the deadline, permanent purge can proceed.
 
-The Privacy Policy explains what is deleted and the limited safety information that can be retained after deletion.
+The Privacy Policy explains what is deleted and the limited safety, moderation, fraud-prevention, or enforcement information that can be retained after deletion.
 
-Once the external account site is deployed, deletion will also be available at **https://umelike.in/delete-account**.
+Account deletion is available from the app and at **https://umelike.in/delete-account**.
 
 ---
 
 ## 9. Your content
 
-You keep ownership of content you provide, subject to any rights you grant UmeLike to host, process, display, transmit, moderate, and otherwise use that content as necessary to operate the service.
+You keep ownership of content you provide, subject to any rights you grant UmeLike to host, process, display, transmit, moderate, filter, and otherwise use that content as necessary to operate and protect the service.
 
 You represent that you have the rights needed to upload the content you provide and that doing so does not violate another person's rights or applicable law.
 
@@ -105,13 +110,25 @@ The licence language in this section should be reviewed by counsel before public
 
 UmeLike's software, branding, interface, designs, and other service materials are owned by or licensed to **[developer/legal entity name]**, except for third-party materials and open-source components governed by their own licences.
 
-Do not copy, reverse engineer, disrupt, scrape, or commercially exploit the service except where applicable law gives you a right that cannot be excluded.
+Do not copy, reverse engineer, disrupt, scrape, bypass safety controls, or commercially exploit the service except where applicable law gives you a right that cannot be excluded.
 
 ---
 
-## 11. Safety
+## 11. Safety and moderation
 
-UmeLike provides tools such as blocking, reporting, profile controls, and optional selfie verification, but no dating service can verify every fact about every person or eliminate all risk.
+UmeLike provides tools such as blocking, reporting, profile controls, optional selfie verification, staff moderation, and server-side message filtering, but no dating service can verify every fact about every person or eliminate all risk.
+
+Reports may be reviewed together with other relevant safety signals, such as prior reports, prior moderation actions, recent profile changes, verification history, or filtered-message events. A report by itself does not automatically mean the reported member violated these Terms.
+
+Depending on the circumstances, UmeLike may:
+
+- send a notice or warning;
+- limit or refuse particular actions;
+- suspend an account for a period of time;
+- remove verification;
+- ban an account permanently;
+- preserve limited safety or enforcement records after deletion; or
+- take other reasonable steps needed to protect members and the service.
 
 Use reasonable care when communicating with or meeting another member. Review the safety guidance in the app, meet in public when appropriate, protect financial and personal information, and report behaviour that may put someone at risk.
 
@@ -127,13 +144,19 @@ Where applicable law requires notice, consent, refunds, or another remedy for a 
 
 ---
 
-## 13. Suspension and termination
+## 13. Suspension, bans, and termination
 
 You may stop using UmeLike and may request account deletion at any time.
 
-UmeLike may restrict, suspend, or terminate access where reasonably necessary to enforce these Terms, protect users, investigate abuse, comply with law, protect the service, or respond to fraud or security risk.
+UmeLike may restrict, suspend, ban, or terminate access where reasonably necessary to enforce these Terms, protect users, investigate abuse, comply with law, protect the service, or respond to fraud or security risk.
 
-Whether and how reasons or appeals must be provided should be finalised with counsel and aligned with applicable platform and consumer-law requirements.
+A suspension may expire automatically at the end of the period shown to the member. A ban is intended to be permanent unless UmeLike later reverses it.
+
+To help enforce a ban, UmeLike may retain limited identifiers, including a one-way hash of the sign-in email address, as described in the Privacy Policy.
+
+Notices, warnings, suspensions, bans, and other moderation actions may be recorded in an internal audit history.
+
+Whether and how appeals, review rights, or detailed reasons must be provided should be finalised with counsel and aligned with applicable law and platform requirements before launch.
 
 ---
 
