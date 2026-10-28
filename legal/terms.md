@@ -30,7 +30,9 @@ Your photos must be of you, your age information must be truthful, and your prof
 
 You may choose an optional public display name subject to UmeLike's display-name rules. If you do not set one, UmeLike may show your first name publicly. Your full real name is kept private from ordinary member-facing profile paths.
 
-If you use Selfie Verification, the selfie must be you performing the gesture UmeLike provides. Verification means UmeLike approved the profile-photo verification submission; it is not a background check and does not guarantee another member's identity, conduct, intentions, or safety.
+Selfie Verification is required to maintain access to UmeLike's dating features. Members must submit a genuine selfie performing the assigned gesture. Accounts that have not been approved within the five-day verification window will have dating features restricted until verification is approved.
+
+Verification indicates that a submitted selfie was reviewed and approved against profile photos. It is not a government identity check, background check, or guarantee of another member's identity, conduct, or intentions. UmeLike may revoke verification where safety concerns justify further review.
 
 ---
 
@@ -116,7 +118,7 @@ Do not copy, reverse engineer, disrupt, scrape, bypass safety controls, or comme
 
 ## 11. Safety and moderation
 
-UmeLike provides tools such as blocking, reporting, profile controls, optional selfie verification, staff moderation, and server-side message filtering, but no dating service can verify every fact about every person or eliminate all risk.
+UmeLike provides tools such as blocking, reporting, profile controls, required selfie verification, staff moderation, and server-side message filtering, but no dating service can verify every fact about every person or eliminate all risk.
 
 Reports may be reviewed together with other relevant safety signals, such as prior reports, prior moderation actions, recent profile changes, verification history, or filtered-message events. A report by itself does not automatically mean the reported member violated these Terms.
 

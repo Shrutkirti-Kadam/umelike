@@ -92,7 +92,11 @@ The stored value is a hash rather than the original email address. It is used fo
 
 ### Selfie verification
 
-If you choose Selfie Verification, we store a verification selfie in private storage for human review. It is not shown on your profile. The current system schedules the verification selfie for deletion 30 days after review; the verification outcome may remain on your account.
+Selfie verification is required to continue accessing UmeLike's dating features after the five-day verification window. Members capture a selfie using the in-app front camera while performing a randomly assigned gesture. An authorized reviewer compares the selfie against their profile photos.
+
+The selfie is stored privately and is never displayed on the member's public profile. After approval or rejection, the selfie is scheduled for deletion by our automated cleanup process, which runs every 15 minutes. Failed cleanup attempts are retried. The verification outcome and necessary review records may be retained.
+
+Members whose verification deadline has passed without approval cannot access dating features until verified. They can still access verification, safety, account export, and deletion functionality.
 
 ### Device and diagnostic information
 
@@ -130,7 +134,7 @@ We use personal data to:
 - show eligible profiles and run matching features;
 - deliver messages, typing state, matches, and push notifications;
 - enforce blocks, unmatches, limits, match expiry, and other service rules;
-- review reports and optional selfie-verification submissions;
+- review reports and required selfie verification submissions;
 - operate moderation, including notices, warnings, suspensions, bans, message filtering, and staff audit records;
 - detect and limit abusive or previously banned accounts returning;
 - detect a previously deleted account returning when safety reports existed;
@@ -179,7 +183,7 @@ No system can promise absolute security. If we discover a security incident that
 | Data | Current retention behaviour |
 |---|---|
 | Active account and profile | Kept while the account exists, then subject to the 14-day deletion grace period |
-| Verification selfie | Scheduled for deletion 30 days after review |
+| Verification selfie | Stored privately until review; after approval or rejection, scheduled for deletion by an automated cleanup job running every 15 minutes. Failed deletions are retried. |
 | Silent match after it ends | Removed 30 days after the match ends |
 | Raw activity timestamp | Kept while Last Active is enabled; removed when that setting is turned off or the account is purged |
 | Successful export audit row | Retained as an operational/rate-limit record; a final retention period should be set before launch |
