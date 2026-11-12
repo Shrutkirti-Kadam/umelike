@@ -238,22 +238,7 @@ export default function Home() {
               onClick={() =>
                 void signOut()
               }
-              className="
-                rounded-full
-                border
-                border-white/50
-                bg-white/35
-                px-4
-                py-2
-                text-[12px]
-                font-medium
-                text-[#5f4d60]
-                shadow-[0_5px_20px_rgba(61,42,61,0.08)]
-                backdrop-blur-xl
-                transition
-                hover:bg-white/60
-                hover:text-[#9b5267]
-              "
+              className="rounded-full border border-white/50 bg-white/35 px-4 py-2 text-[12px] font-medium text-[#5f4d60] shadow-[0_5px_20px_rgba(61,42,61,0.08)] backdrop-blur-xl transition hover:bg-white/60 hover:text-[#9b5267]"
             >
               Sign out
             </button>
@@ -336,30 +321,10 @@ function CheckingCard() {
   return (
     <div className="w-full max-w-[360px]">
       <div
-        className="
-          rounded-[26px]
-          border
-          border-white/50
-          bg-white/[0.26]
-          px-8
-          py-9
-          text-center
-          shadow-[0_20px_60px_rgba(58,38,58,0.10)]
-          backdrop-blur-[32px]
-          backdrop-saturate-[145%]
-        "
+        className="rounded-[26px] border border-white/50 bg-white/[0.26] px-8 py-9 text-center shadow-[0_20px_60px_rgba(58,38,58,0.10)] backdrop-blur-[32px] backdrop-saturate-[145%]"
       >
         <div
-          className="
-            mx-auto
-            h-8
-            w-8
-            animate-spin
-            rounded-full
-            border-[3px]
-            border-[#9b5267]/20
-            border-t-[#9b5267]
-          "
+          className="mx-auto h-8 w-8 animate-spin rounded-full border-[3px] border-[#9b5267]/20 border-t-[#9b5267]"
         />
 
         <p className="mt-5 text-[13px] text-[#695969]">
@@ -381,26 +346,10 @@ function LandingContent({
 }) {
   return (
     <div
-      className="
-        w-full
-        max-w-[680px]
-        -translate-y-4
-        text-center
-        sm:-translate-y-6
-        animate-[landingIn_650ms_cubic-bezier(.22,1,.36,1)_both]
-      "
+      className="w-full max-w-[680px] -translate-y-4 text-center sm:-translate-y-6 animate-[landingIn_650ms_cubic-bezier(.22,1,.36,1)_both]"
     >
       <h1
-        className="
-          font-display
-          text-[44px]
-          font-medium
-          leading-[1.05]
-          tracking-[-0.045em]
-          text-[#2d2230]
-          sm:text-[58px]
-          md:text-[68px]
-        "
+        className="font-display text-[44px] font-medium leading-[1.05] tracking-[-0.045em] text-[#2d2230] sm:text-[58px] md:text-[68px]"
       >
         Meet someone who
         <br />
@@ -425,30 +374,7 @@ function LandingContent({
         onClick={
           onGetStarted
         }
-        className="
-          mt-10
-          inline-flex
-          min-h-[56px]
-          items-center
-          justify-center
-          rounded-full
-          border
-          border-[#49394c]/10
-          bg-white/75
-          px-8
-          text-[15px]
-          font-medium
-          text-[#352a38]
-          shadow-[0_5px_30px_rgba(61,42,61,0.10)]
-          backdrop-blur-xl
-          transition
-          duration-300
-          hover:-translate-y-[1px]
-          hover:bg-white/90
-          hover:shadow-[0_8px_38px_rgba(61,42,61,0.14)]
-          active:translate-y-0
-          active:scale-[0.985]
-        "
+        className="mt-10 inline-flex min-h-[56px] items-center justify-center rounded-full border border-[#49394c]/10 bg-white/75 px-8 text-[15px] font-medium text-[#352a38] shadow-[0_5px_30px_rgba(61,42,61,0.10)] backdrop-blur-xl transition duration-300 hover:-translate-y-[1px] hover:bg-white/90 hover:shadow-[0_8px_38px_rgba(61,42,61,0.14)] active:translate-y-0 active:scale-[0.985]"
       >
         Get started
       </button>
@@ -484,16 +410,7 @@ function LandingContent({
 function UMark() {
   return (
     <div
-      className="
-        flex
-        h-[38px]
-        w-[38px]
-        items-center
-        justify-center
-        rounded-[11px]
-        bg-[#2f2532]
-        shadow-[0_5px_18px_rgba(45,34,48,0.16)]
-      "
+      className="flex h-[38px] w-[38px] items-center justify-center rounded-[11px] bg-[#2f2532] shadow-[0_5px_18px_rgba(45,34,48,0.16)]"
     >
       <svg
         viewBox="0 0 48 48"
