@@ -177,6 +177,13 @@ export function SiteFooter() {
         >
           Delete account
         </Link>
+
+        <Link
+          href="/child-safety"
+          className="transition hover:text-[#9b5267]"
+        >
+          Child safety
+        </Link>
       </nav>
 
       A quieter place to meet someone.
