@@ -715,21 +715,7 @@ export function OnboardingWizard({
   return (
     <div className="w-full max-w-[540px]">
       <div
-        className="
-          relative
-          overflow-hidden
-          rounded-[30px]
-          border
-          border-white/55
-          bg-white/[0.30]
-          px-7
-          py-8
-          shadow-[0_24px_80px_rgba(58,38,58,0.13),inset_0_1px_0_rgba(255,255,255,0.6)]
-          backdrop-blur-[36px]
-          backdrop-saturate-[150%]
-          sm:px-10
-          sm:py-10
-        "
+        className="relative overflow-hidden rounded-[30px] border border-white/55 bg-white/[0.30] px-7 py-8 shadow-[0_24px_80px_rgba(58,38,58,0.13),inset_0_1px_0_rgba(255,255,255,0.6)] backdrop-blur-[36px] backdrop-saturate-[150%] sm:px-10 sm:py-10"
       >
         <WizardHeader
           email={email}
@@ -968,22 +954,7 @@ function WizardHeader({
         <button
           type="button"
           onClick={onBack}
-          className="
-            flex
-            h-9
-            w-9
-            items-center
-            justify-center
-            rounded-full
-            border
-            border-[#47384a]/10
-            bg-white/40
-            text-lg
-            text-[#5f4d60]
-            backdrop-blur-xl
-            transition
-            hover:bg-white/70
-          "
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#47384a]/10 bg-white/40 text-lg text-[#5f4d60] backdrop-blur-xl transition hover:bg-white/70"
           aria-label="Go back"
         >
           ←
@@ -1055,16 +1026,7 @@ function StepHeading({
       </p>
 
       <h1
-        className="
-          mt-3
-          font-display
-          text-[38px]
-          font-medium
-          leading-[1.05]
-          tracking-[-0.045em]
-          text-[#2d2230]
-          sm:text-[44px]
-        "
+        className="mt-3 font-display text-[38px] font-medium leading-[1.05] tracking-[-0.045em] text-[#2d2230] sm:text-[44px]"
       >
         {children}
       </h1>
@@ -1663,28 +1625,7 @@ function BioStep({
               event.target.value,
             )
           }
-          className="
-            w-full
-            resize-none
-            rounded-[20px]
-            border
-            border-[#4a394b]/10
-            bg-white/45
-            px-5
-            py-4
-            text-[14px]
-            leading-6
-            text-[#332736]
-            outline-none
-            backdrop-blur-xl
-            transition
-            placeholder:text-[#796b79]/45
-            hover:border-[#9b5267]/20
-            focus:border-[#9b5267]/45
-            focus:bg-white/65
-            focus:ring-4
-            focus:ring-[#9b5267]/10
-          "
+          className="w-full resize-none rounded-[20px] border border-[#4a394b]/10 bg-white/45 px-5 py-4 text-[14px] leading-6 text-[#332736] outline-none backdrop-blur-xl transition placeholder:text-[#796b79]/45 hover:border-[#9b5267]/20 focus:border-[#9b5267]/45 focus:bg-white/65 focus:ring-4 focus:ring-[#9b5267]/10"
         />
 
         <div className="mt-2 flex justify-between px-1">
@@ -1824,14 +1765,7 @@ function PromptsStep({
           ) => (
             <div
               key={index}
-              className="
-                rounded-[20px]
-                border
-                border-white/45
-                bg-white/30
-                p-4
-                backdrop-blur-xl
-              "
+              className="rounded-[20px] border border-white/45 bg-white/30 p-4 backdrop-blur-xl"
             >
               <select
                 value={
@@ -1845,20 +1779,7 @@ function PromptsStep({
                       .value,
                   )
                 }
-                className="
-                  h-[48px]
-                  w-full
-                  rounded-[14px]
-                  border
-                  border-[#4a394b]/10
-                  bg-white/55
-                  px-4
-                  text-[12.5px]
-                  font-medium
-                  text-[#49394c]
-                  outline-none
-                  focus:border-[#9b5267]/40
-                "
+                className="h-[48px] w-full rounded-[14px] border border-[#4a394b]/10 bg-white/55 px-4 text-[12.5px] font-medium text-[#49394c] outline-none focus:border-[#9b5267]/40"
               >
                 {PROMPT_OPTIONS.map(
                   (prompt) => (
@@ -1891,25 +1812,7 @@ function PromptsStep({
                       .value,
                   )
                 }
-                className="
-                  mt-3
-                  w-full
-                  resize-none
-                  rounded-[14px]
-                  border
-                  border-[#4a394b]/10
-                  bg-white/45
-                  px-4
-                  py-3
-                  text-[13px]
-                  leading-5
-                  text-[#332736]
-                  outline-none
-                  transition
-                  placeholder:text-[#796b79]/45
-                  focus:border-[#9b5267]/40
-                  focus:bg-white/65
-                "
+                className="mt-3 w-full resize-none rounded-[14px] border border-[#4a394b]/10 bg-white/45 px-4 py-3 text-[13px] leading-5 text-[#332736] outline-none transition placeholder:text-[#796b79]/45 focus:border-[#9b5267]/40 focus:bg-white/65"
               />
 
               <p className="mt-1 text-right text-[10px] text-[#786878]/55">
@@ -1987,17 +1890,7 @@ function PhotosStep({
               key={
                 photo.id
               }
-              className="
-                group
-                relative
-                aspect-[4/5]
-                overflow-hidden
-                rounded-[20px]
-                border
-                border-white/50
-                bg-white/30
-                shadow-[0_8px_24px_rgba(50,35,48,0.08)]
-              "
+              className="group relative aspect-[4/5] overflow-hidden rounded-[20px] border border-white/50 bg-white/30 shadow-[0_8px_24px_rgba(50,35,48,0.08)]"
               style={{
                 backgroundImage: `url("${photo.preview}")`,
                 backgroundSize:
@@ -2008,19 +1901,7 @@ function PhotosStep({
             >
               {index === 0 && (
                 <span
-                  className="
-                    absolute
-                    left-2.5
-                    top-2.5
-                    rounded-full
-                    bg-[#2f2532]/85
-                    px-2.5
-                    py-1
-                    text-[9px]
-                    font-medium
-                    text-white
-                    backdrop-blur-md
-                  "
+                  className="absolute left-2.5 top-2.5 rounded-full bg-[#2f2532]/85 px-2.5 py-1 text-[9px] font-medium text-white backdrop-blur-md"
                 >
                   Main
                 </span>
@@ -2033,23 +1914,7 @@ function PhotosStep({
                     photo.id,
                   )
                 }
-                className="
-                  absolute
-                  right-2.5
-                  top-2.5
-                  flex
-                  h-7
-                  w-7
-                  items-center
-                  justify-center
-                  rounded-full
-                  bg-black/45
-                  text-[13px]
-                  text-white
-                  backdrop-blur-md
-                  transition
-                  hover:bg-black/65
-                "
+                className="absolute right-2.5 top-2.5 flex h-7 w-7 items-center justify-center rounded-full bg-black/45 text-[13px] text-white backdrop-blur-md transition hover:bg-black/65"
                 aria-label="Remove photo"
               >
                 ×
@@ -2061,37 +1926,10 @@ function PhotosStep({
         {photos.length <
           6 && (
           <label
-            className="
-              flex
-              aspect-[4/5]
-              cursor-pointer
-              flex-col
-              items-center
-              justify-center
-              rounded-[20px]
-              border
-              border-dashed
-              border-[#9b5267]/25
-              bg-white/25
-              text-center
-              backdrop-blur-xl
-              transition
-              hover:border-[#9b5267]/45
-              hover:bg-white/45
-            "
+            className="flex aspect-[4/5] cursor-pointer flex-col items-center justify-center rounded-[20px] border border-dashed border-[#9b5267]/25 bg-white/25 text-center backdrop-blur-xl transition hover:border-[#9b5267]/45 hover:bg-white/45"
           >
             <span
-              className="
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-full
-                bg-[#9b5267]/10
-                text-[22px]
-                text-[#9b5267]
-              "
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-[#9b5267]/10 text-[22px] text-[#9b5267]"
             >
               +
             </span>
@@ -2186,42 +2024,13 @@ function ReviewStep({
   return (
     <div className="w-full max-w-[620px]">
       <div
-        className="
-          max-h-[78vh]
-          overflow-y-auto
-          rounded-[30px]
-          border
-          border-white/55
-          bg-white/[0.30]
-          px-7
-          py-8
-          shadow-[0_24px_80px_rgba(58,38,58,0.13)]
-          backdrop-blur-[36px]
-          sm:px-10
-          sm:py-10
-        "
+        className="max-h-[78vh] overflow-y-auto rounded-[30px] border border-white/55 bg-white/[0.30] px-7 py-8 shadow-[0_24px_80px_rgba(58,38,58,0.13)] backdrop-blur-[36px] sm:px-10 sm:py-10"
       >
         <button
           type="button"
           onClick={onBack}
           disabled={saving}
-          className="
-            flex
-            h-9
-            w-9
-            items-center
-            justify-center
-            rounded-full
-            border
-            border-[#47384a]/10
-            bg-white/40
-            text-lg
-            text-[#5f4d60]
-            transition
-            hover:bg-white/65
-            disabled:cursor-not-allowed
-            disabled:opacity-40
-          "
+          className="flex h-9 w-9 items-center justify-center rounded-full border border-[#47384a]/10 bg-white/40 text-lg text-[#5f4d60] transition hover:bg-white/65 disabled:cursor-not-allowed disabled:opacity-40"
           aria-label="Go back"
         >
           ←
@@ -2243,16 +2052,7 @@ function ReviewStep({
 
         {photos[0] && (
           <div
-            className="
-              mt-8
-              aspect-[4/3]
-              w-full
-              rounded-[24px]
-              bg-white/30
-              bg-cover
-              bg-center
-              shadow-[0_12px_36px_rgba(45,34,48,0.12)]
-            "
+            className="mt-8 aspect-[4/3] w-full rounded-[24px] bg-white/30 bg-cover bg-center shadow-[0_12px_36px_rgba(45,34,48,0.12)]"
             style={{
               backgroundImage: `url("${photos[0].preview}")`,
             }}
@@ -2332,13 +2132,7 @@ function ReviewStep({
                   key={
                     index
                   }
-                  className="
-                    rounded-[18px]
-                    border
-                    border-white/40
-                    bg-white/25
-                    p-4
-                  "
+                  className="rounded-[18px] border border-white/40 bg-white/25 p-4"
                 >
                   <p className="text-[11px] font-medium text-[#9b5267]">
                     {
@@ -2383,16 +2177,7 @@ function ReviewStep({
 
         {saveError && (
           <div
-            className="
-              mt-8
-              rounded-[18px]
-              border
-              border-[#9b5267]/20
-              bg-[#9b5267]/[0.08]
-              px-5
-              py-4
-              text-center
-            "
+            className="mt-8 rounded-[18px] border border-[#9b5267]/20 bg-[#9b5267]/[0.08] px-5 py-4 text-center"
           >
             <p className="text-[12px] font-medium text-[#814255]">
               We couldn&apos;t finish your profile
@@ -2410,42 +2195,12 @@ function ReviewStep({
           onClick={() =>
             void onFinish()
           }
-          className="
-            mt-8
-            flex
-            h-[58px]
-            w-full
-            items-center
-            justify-center
-            rounded-full
-            bg-[#2f2532]
-            px-6
-            text-[14px]
-            font-medium
-            text-[#f7eee6]
-            shadow-[0_10px_28px_rgba(47,37,50,0.20)]
-            transition
-            duration-300
-            hover:-translate-y-[1px]
-            hover:bg-[#241c27]
-            active:translate-y-0
-            active:scale-[0.99]
-            disabled:cursor-not-allowed
-            disabled:opacity-55
-          "
+          className="mt-8 flex h-[58px] w-full items-center justify-center rounded-full bg-[#2f2532] px-6 text-[14px] font-medium text-[#f7eee6] shadow-[0_10px_28px_rgba(47,37,50,0.20)] transition duration-300 hover:-translate-y-[1px] hover:bg-[#241c27] active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-55"
         >
           {saving ? (
             <span className="flex items-center gap-3">
               <span
-                className="
-                  h-4
-                  w-4
-                  animate-spin
-                  rounded-full
-                  border-2
-                  border-white/30
-                  border-t-white
-                "
+                className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white"
               />
 
               Saving your profile…
@@ -2496,19 +2251,7 @@ function ReviewTag({
 }) {
   return (
     <span
-      className="
-        mr-2
-        inline-flex
-        rounded-full
-        border
-        border-[#9b5267]/15
-        bg-[#9b5267]/[0.07]
-        px-3
-        py-1.5
-        text-[11px]
-        font-medium
-        text-[#714254]
-      "
+      className="mr-2 inline-flex rounded-full border border-[#9b5267]/15 bg-[#9b5267]/[0.07] px-3 py-1.5 text-[11px] font-medium text-[#714254]"
     >
       {children}
     </span>
@@ -2689,30 +2432,7 @@ function ContinueButton({
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className="
-        mt-6
-        flex
-        h-[56px]
-        w-full
-        items-center
-        justify-center
-        rounded-full
-        bg-[#2f2532]
-        px-6
-        text-[14px]
-        font-medium
-        text-[#f7eee6]
-        shadow-[0_10px_28px_rgba(47,37,50,0.20)]
-        transition
-        duration-300
-        hover:-translate-y-[1px]
-        hover:bg-[#241c27]
-        active:translate-y-0
-        active:scale-[0.99]
-        disabled:cursor-not-allowed
-        disabled:opacity-30
-        disabled:shadow-none
-      "
+      className="mt-6 flex h-[56px] w-full items-center justify-center rounded-full bg-[#2f2532] px-6 text-[14px] font-medium text-[#f7eee6] shadow-[0_10px_28px_rgba(47,37,50,0.20)] transition duration-300 hover:-translate-y-[1px] hover:bg-[#241c27] active:translate-y-0 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-30 disabled:shadow-none"
     >
       {label}
     </button>
