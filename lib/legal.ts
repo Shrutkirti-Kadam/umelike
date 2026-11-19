@@ -8,7 +8,7 @@ import path from "node:path";
  * documents use. The markdown is ours; text is HTML-escaped.
  */
 
-export function readLegal(name: "privacy" | "terms"): string {
+export function readLegal(name: "privacy" | "terms" | "child-safety"): string {
   return fs.readFileSync(path.join(process.cwd(), "legal", `${name}.md`), "utf8");
 }
 

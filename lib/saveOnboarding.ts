@@ -1,4 +1,8 @@
 import { supabase } from "@/lib/supabase";
+import {
+  describeDisplayNameError,
+  isDisplayNameError,
+} from "@/lib/displayName";
 
 export type OnboardingPrompt = {
   prompt: string;
@@ -7,6 +11,7 @@ export type OnboardingPrompt = {
 
 export type SaveOnboardingInput = {
   name: string;
+  displayName: string | null;
   dob: string;
   age: number;
 
@@ -169,6 +174,9 @@ export async function saveOnboardingProfile(
           name:
             cleanName,
 
+          display_name:
+            input.displayName,
+
           age:
             input.age,
 
@@ -251,6 +259,12 @@ export async function saveOnboardingProfile(
       "Profile save error:",
       profileError,
     );
+
+    if (isDisplayNameError(profileError.message)) {
+      throw new Error(
+        describeDisplayNameError(profileError.message),
+      );
+    }
 
     throw new Error(
       "We couldn't save your profile details. Please try again.",

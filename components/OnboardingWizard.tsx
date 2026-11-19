@@ -9,6 +9,12 @@ import {
   saveOnboardingProfile,
 } from "@/lib/saveOnboarding";
 
+import {
+  normaliseDisplayName,
+  publicNamePreview,
+  validateDisplayName,
+} from "@/lib/displayName";
+
 // =============================================================================
 // TYPES
 // =============================================================================
@@ -160,6 +166,9 @@ export function OnboardingWizard({
   const [name, setName] =
     useState("");
 
+  const [displayName, setDisplayName] =
+    useState("");
+
   const [dob, setDob] =
     useState("");
 
@@ -253,6 +262,15 @@ export function OnboardingWizard({
   const cleanName =
     name.trim();
 
+  const cleanDisplayName =
+    normaliseDisplayName(displayName);
+
+  const displayNameError =
+    validateDisplayName(displayName);
+
+  const shownName =
+    publicNamePreview(cleanDisplayName, cleanName);
+
   const cleanCustomGender =
     customGender.trim();
 
@@ -283,7 +301,8 @@ export function OnboardingWizard({
 
   const nameValid =
     cleanName.length >= 2 &&
-    cleanName.length <= 40;
+    cleanName.length <= 40 &&
+    displayNameError === null;
 
   const birthdayValid =
     age !== null &&
@@ -606,6 +625,9 @@ export function OnboardingWizard({
         name:
           cleanName,
 
+        displayName:
+          cleanDisplayName,
+
         dob,
 
         age,
@@ -671,6 +693,7 @@ export function OnboardingWizard({
       <ReviewStep
         email={email}
         name={cleanName}
+        shownName={shownName}
         age={age}
         gender={
           displayGender
@@ -733,6 +756,10 @@ export function OnboardingWizard({
               setName={
                 setName
               }
+              displayName={displayName}
+              setDisplayName={setDisplayName}
+              displayNameError={displayNameError}
+              shownName={shownName}
               valid={
                 nameValid
               }
@@ -1045,6 +1072,10 @@ function StepHeading({
 function NameStep({
   name,
   setName,
+  displayName,
+  setDisplayName,
+  displayNameError,
+  shownName,
   valid,
   onContinue,
 }: {
@@ -1052,14 +1083,23 @@ function NameStep({
   setName: (
     value: string,
   ) => void;
+  displayName: string;
+  setDisplayName: (
+    value: string,
+  ) => void;
+  displayNameError: string | null;
+  shownName: string;
   valid: boolean;
   onContinue: () => void;
 }) {
+  const nicknameSet =
+    displayName.trim().length > 0;
+
   return (
     <div>
       <StepHeading
         eyebrow="First things first"
-        description="This is the name people will see on your profile."
+        description="Your full name stays private. Other members see your first name, or a nickname if you'd rather."
       >
         What should we
         <br />
@@ -1080,7 +1120,7 @@ function NameStep({
           autoComplete="name"
           autoFocus
           maxLength={40}
-          placeholder="Your first name"
+          placeholder="Your name"
           value={name}
           onChange={(event) =>
             setName(
@@ -1101,11 +1141,72 @@ function NameStep({
 
         <div className="mt-2 flex justify-between px-1">
           <p className="text-[11px] text-[#786878]/65">
-            2–40 characters
+            2–40 characters · never shown in full
           </p>
 
           <p className="text-[11px] text-[#786878]/65">
             {name.length}/40
+          </p>
+        </div>
+
+        <label
+          htmlFor="profile-nickname"
+          className="ml-1 mt-6 block text-[12px] font-medium text-[#5d4c5e]"
+        >
+          Nickname{" "}
+          <span className="font-normal text-[#786878]/70">
+            (optional)
+          </span>
+        </label>
+
+        <input
+          id="profile-nickname"
+          type="text"
+          autoComplete="nickname"
+          maxLength={20}
+          placeholder="Leave blank to use your first name"
+          value={displayName}
+          onChange={(event) =>
+            setDisplayName(
+              event.target.value,
+            )
+          }
+          onKeyDown={(event) => {
+            if (
+              event.key ===
+                "Enter" &&
+              valid
+            ) {
+              onContinue();
+            }
+          }}
+          aria-invalid={
+            displayNameError !== null
+          }
+          aria-describedby="profile-nickname-hint"
+          className={inputClass}
+        />
+
+        <div className="mt-2 flex justify-between gap-4 px-1">
+          <p
+            id="profile-nickname-hint"
+            className={
+              displayNameError
+                ? "text-[11px] text-[#b6452f]"
+                : "text-[11px] text-[#786878]/65"
+            }
+          >
+            {displayNameError
+              ? displayNameError
+              : nicknameSet
+                ? `People will see “${shownName}”. Your real name stays private.`
+                : name.trim().length > 0
+                  ? `Leave this blank and people will see “${shownName}”.`
+                  : "Letters, spaces, dots and hyphens · 2–20 characters"}
+          </p>
+
+          <p className="shrink-0 text-[11px] text-[#786878]/65">
+            {displayName.length}/20
           </p>
         </div>
 
@@ -1987,6 +2088,7 @@ function PhotosStep({
 function ReviewStep({
   email,
   name,
+  shownName,
   age,
   gender,
   orientation,
@@ -2005,6 +2107,7 @@ function ReviewStep({
 }: {
   email: string;
   name: string;
+  shownName: string;
   age: number | null;
   gender: string;
   orientation: string;
@@ -2061,10 +2164,16 @@ function ReviewStep({
 
         <div className="mt-7">
           <h2 className="font-display text-[34px] font-medium tracking-[-0.04em] text-[#2d2230]">
-            {name}
+            {shownName}
             {age !== null &&
               `, ${age}`}
           </h2>
+
+          {shownName !== name && (
+            <p className="mt-1 text-[12px] text-[#786878]/70">
+              Your name, {name}, stays private.
+            </p>
+          )}
 
           <p className="mt-2 text-[13px] text-[#695969]">
             {neighborhood}
